@@ -1,20 +1,18 @@
 #pragma once
 #include <cstddef>
 
-
 namespace task {
-
 
 class list {
 
 public:
 
     list();
-    list(size_t count, const int& value = int());
+    explicit list(size_t count, const int& value = int());
+    list(const list& other);
 
     ~list();
     list& operator=(const list& other);
-
 
     int& front();
     const int& front() const;
@@ -22,11 +20,9 @@ public:
     int& back();
     const int& back() const;
 
-
     bool empty() const;
     size_t size() const;
     void clear();
-
 
     void push_back(const int& value);
     void pop_back();
@@ -35,16 +31,24 @@ public:
     void resize(size_t count);
     void swap(list& other);
 
-
     void remove(const int& value);
     void unique();
     void sort();
 
-    // Your code goes here?..
+    list merge(const list &b);
 
 private:
+    class ListNode {
+    public:
+        explicit ListNode(int val);
+        int val;
+        ListNode *nxt;
+        ListNode *prev;
+    };
 
-    // Your code goes here...
+    ListNode *head;
+    ListNode *tail;
+    int sz;
 
 };
 
