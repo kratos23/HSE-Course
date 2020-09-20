@@ -48,7 +48,7 @@ private:
 
     ListNode *head;
     ListNode *tail;
-    int sz;
+    int size_;
 
 };
 

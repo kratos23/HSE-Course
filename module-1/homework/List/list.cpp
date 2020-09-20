@@ -12,7 +12,7 @@ list::ListNode::ListNode(int val) {
 list::list() {
     this->head = nullptr;
     this->tail = nullptr;
-    this->sz = 0;
+    this->size_ = 0;
 }
 
 list::list(size_t count, const int& value) : list::list() {
@@ -22,11 +22,7 @@ list::list(size_t count, const int& value) : list::list() {
 }
 
 list::list(const list& other) : list::list() {
-    ListNode *cur = other.head;
-    while (cur != nullptr) {
-        push_back(cur->val);
-        cur = cur->nxt;
-    }
+    *this = other;
 }
 
 list::~list() {
@@ -37,8 +33,21 @@ list& list::operator=(const list& other) {
     if (this != &other) {
         clear();
         ListNode *cur = other.head;
+        ListNode **nxtPtr = &head;
         while (cur != nullptr) {
-            push_back(cur->val);
+            auto *newNode = new ListNode(*cur);
+            (*nxtPtr) = newNode;
+            nxtPtr = &(newNode->nxt);
+            cur = cur->nxt;
+            size_++;
+        }
+        cur = head;
+        while (cur != nullptr) {
+            if (cur->nxt == nullptr) {
+                tail = cur;
+            } else {
+                cur->nxt->prev = cur;
+            }
             cur = cur->nxt;
         }
     }
@@ -66,7 +75,7 @@ bool list::empty() const {
 }
 
 size_t list::size() const {
-    return sz;
+    return size_;
 }
 
 void list::clear() {
@@ -85,7 +94,7 @@ void list::push_back(const int& value) {
         tail->nxt = newNode;
         tail = newNode;
     }
-    sz++;
+    size_++;
 }
 
 void list::pop_back() {
@@ -98,7 +107,7 @@ void list::pop_back() {
     if (tail == nullptr) {
         head = nullptr;
     }
-    sz--;
+    size_--;
 }
 
 void list::push_front(const int& value) {
@@ -111,7 +120,7 @@ void list::push_front(const int& value) {
         head->prev = newNode;
         head = newNode;
     }
-    sz++;
+    size_++;
 }
 
 void list::pop_front() {
@@ -124,7 +133,7 @@ void list::pop_front() {
     if (head == nullptr) {
         tail = nullptr;
     }
-    sz--;
+    size_--;
 }
 
 void list::resize(size_t count) {
@@ -132,14 +141,14 @@ void list::resize(size_t count) {
         pop_back();
     }
     while (size() < count) {
-        push_back(0);
+        push_back(int());
     }
 }
 
 void list::swap(list& other) {
     std::swap(head, other.head);
     std::swap(tail, other.tail);
-    std::swap(sz, other.sz);
+    std::swap(size_, other.size_);
 }
 
 void list::remove(const int& value) {
@@ -160,7 +169,7 @@ void list::remove(const int& value) {
                 head = nxt;
             }
             delete cur;
-            sz--;
+            size_--;
         }
         cur = nxt;
     }
