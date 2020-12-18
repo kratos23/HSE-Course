@@ -36,3 +36,4 @@ add_executable(runner tests.cpp)
 target_link_libraries(runner LINK_PUBLIC typelist gtest_main)
 
 add_test(NAME runner_test COMMAND runner)
+add_executable(main main.cpp )
